@@ -5,7 +5,7 @@
   {% load static %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Medilab Free Bootstrap HTML5 Template</title>
+  <title>Crime reporter</title>
   <meta name="description" content="Free Bootstrap Theme by BootstrapMade.com">
   <meta name="keywords" content="free website templates, free bootstrap themes, free template, free bootstrap, free website template">
 
@@ -19,6 +19,8 @@
     Author: BootstrapMade.com
     Author URL: https://bootstrapmade.com
   ======================================================= -->
+    <link rel="stylesheet" type="text/css" href="{% static 'profile/profile.css' %}">
+    <script src="{% static 'contactform/contactform.js' %}"></script>
 </head>
 
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
@@ -38,11 +40,35 @@
             <div class="collapse navbar-collapse navbar-right" id="myNavbar">
               <ul class="nav navbar-nav">
                 <li class="active"><a href="{% url 'index' %}">Home</a></li>
-                <li class=""><a href="#service">Services</a></li>
+
                 <li class=""><a href="#about">About</a></li>
-                <li class=""><a href="#testimonial">Thana</a></li>
+                <li class=""><a href="#testimonial">hi</a></li>
+                <li class=""><a href="{% url 'thanaNumber' %}">Thana</a></li>
                 <li class=""><a href="#contact">Contact</a></li>
+
+                <li class=""><a href="#service">Services</a></li>
+                {% if user.is_authenticated %}
+                                <li>
+                <div class="dropdown">
+                  <span><img class="avatar" src=" {% static 'index/img/login.png' %}"></span>
+                 <div class="dropdown-content">
+                <ul>
+                    <li class="aa"> <a class="aa" href="#">profile</a></li>
+                                    <li class=""><a href="javascript:{document.getElementById('logout').submit()}">logout</a></li><li class="" >
+                    <form id="logout" action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden">
+                    </form>
+                </ul>
+                 </div></div>
+                </li>
+
+                {% else %}
                 <li class=""><a href="{% url 'login' %}">Login</a></li>
+                <li class=""><a href="{% url 'singup' %}">Registration</a>
+                {% endif %}
+
+
               </ul>
             </div>
           </div>
@@ -117,7 +143,5 @@
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
   <script src="{% static 'js/custom.js' %}"></script>
   <script src="{% static 'contactform/contactform.js' %}"></script>
-
-
-</body>
+  </body>
 </html>

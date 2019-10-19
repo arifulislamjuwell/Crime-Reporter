@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="{% static 'auth/singup.css' %}">
+  <div class="login-box">
+    <div class="lb-header">
+      Registration
+    </div>
+
+    <form action="{% url 'singup' %}" method="POST" enctype="multipart/form-data" class="email-login">
+    {% csrf_token %}
+    <div class="u-form-group">
+        <input id="poli" type="radio" name="vi" value="police" onclick="chageposition();"> <b>Adminstration &emsp;</b>
+        <input id="vict" type="radio" name="vi" value="victim" onclick="chageposition();"><b>Victim  </b>  <br>
+    </div>
+    <div class="u-form-group">
+        <input name="email" type="email" placeholder="Email"/>
+    </div>
+    <div class="u-form-group">
+        <input name="password" type="password" placeholder="Password"/>
+    </div>
+    <div class="u-form-group">
+        <input name="password2" type="password" placeholder="Confirm password"/>
+    </div>
+    <div class="u-form-group">
+        <input name="fullname" type="text" placeholder="Full name" required/>
+    </div>
+
+    <div class="u-form-group">
+        <select name="choice">
+            <option value="first">Select position</option>
+            <option id="p1" value="sub" ></option>
+            <option id="p2" value="sp"></option>
+        </select>
+    </div>
+    <div class="u-form-group">
+        <button type="submit">Sing up</button>
+    </div>
+    <p id="new"></p>
+</form>
+
+  </div>
+<br>
+<br>
+
+<script>
+function chageposition() {
+    var val = document.getElementById('poli');
+    var val1=document.getElementById('vict');
+    if (val.checked){
+            document.getElementById('p1').innerHTML='Sub inspector';
+            document.getElementById('p2').innerHTML='OC';
+        }
+    else if (val1.checked){
+        document.getElementById('p1').innerHTML='student';
+        document.getElementById('p2').innerHTML='job';
+    }
+}
+</script>
+{% endblock %}

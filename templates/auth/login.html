@@ -7,21 +7,23 @@
     <div class="lb-header">
       Login
     </div>
+    <p align="center" style="color:red"><b>{{ error_user }}</b></p>
     <div class="social-login">
       <a href="#">
         <i class="fa fa-google-plus fa-lg"></i>
         Log in with Google
       </a>
     </div>
-    <form class="email-login">
+    <form class="email-login" method="post" enctype="multipart/form-data" action="{% url 'login' %}">
+      {% csrf_token %}
       <div class="u-form-group">
-        <input type="email" placeholder="Email"/>
+        <input name="email" type="email" placeholder="Email"/>
       </div>
       <div class="u-form-group">
-        <input type="password" placeholder="Password"/>
+        <input name="password" type="password" placeholder="Password"/>
       </div>
       <div class="u-form-group">
-        <button>Log in</button>
+        <button type="submit">Log in</button>
       </div>
       <div class="u-form-group">
         <a href="#" class="forgot-password">Forgot password?</a>
