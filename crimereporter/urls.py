@@ -21,5 +21,5 @@ urlpatterns = [
     path('', include('index.urls')),
     path('', include('authenticate.urls')),
     path('', include('other.urls')),
-
+    path('',include('cr.urls')),
 ]

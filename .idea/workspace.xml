@@ -2,26 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="548f55d0-0ed2-4efc-89c7-cd107b1060d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/static/profile/profile.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/profile/profile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/auth/singup.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/crime.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/crime.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authenticate/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/authenticate/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authenticate/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/authenticate/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authenticate/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/authenticate/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authenticate/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/authenticate/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crimereporter/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/crimereporter/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cr/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cr/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crimereporter/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/crimereporter/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/auth/login.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/auth/login.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/auth/login.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/index/img/photothumb.db" beforeDir="false" afterPath="$PROJECT_DIR$/static/index/img/photothumb.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/auth/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/auth/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,8 +15,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -46,7 +29,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="GraphQL" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/logger test" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
@@ -125,5 +108,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/cr/urls.py</url>
+          <line>5</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
