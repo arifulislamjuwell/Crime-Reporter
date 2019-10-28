@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <link rel="stylesheet" type="text/css" href="{% static 'auth/singup.css' %}">
   <div class="login-box">
     <div class="lb-header">
@@ -10,8 +11,8 @@
     <form action="{% url 'singup' %}" method="POST" enctype="multipart/form-data" class="email-login">
     {% csrf_token %}
     <div class="u-form-group">
-        <input id="poli" type="radio" name="vi" value="police" onclick="chageposition();"> <b>Adminstration &emsp;</b>
-        <input id="vict" type="radio" name="vi" value="victim" onclick="chageposition();"><b>Victim  </b>  <br>
+        <input id="poli" type="radio" name="adminstration" value="police" onclick="chageposition();"> <b>Adminstration &emsp;</b>
+        <input id="vict" type="radio" name="victim" value="victim" onclick="chageposition();"><b>Victim  </b>  <br>
     </div>
     <div class="u-form-group">
         <input name="email" type="email" placeholder="Email"/>
@@ -25,14 +26,38 @@
     <div class="u-form-group">
         <input name="fullname" type="text" placeholder="Full name" required/>
     </div>
+    <div class="u-form-group">
+        <input name="number" type="text" placeholder="Mobile Number" required/>
+    </div>
 
     <div class="u-form-group">
-        <select name="choice">
+        <select name="choice1">
             <option value="first">Select position</option>
-            <option id="p1" value="sub" ></option>
-            <option id="p2" value="sp"></option>
+            <option id="p1" value="" ></option>
+            <option id="p2" value=""></option>
         </select>
     </div>
+    
+    <div class="u-form-group">
+        <select name="choice" class='chech'>
+            <option value="">Division</option>
+            <option value="dhaka">Dhaka</option>
+            <option value="chittagong">chittagong</option>
+            <option value="barishal">Barishal</option>
+            <option value="khulna">Khulna</option>
+            <option value="rajshahi">Rajshahi</option>
+            <option value="rangpur">Rangpur</option>
+            <option value="sylhet">Sylhet</option>
+            <option value="mymensingh">Mymensingh</option>    
+        </select>
+    </div>
+    
+    <div class="u-form-group">
+        <select id="check11" name="dis">
+            <option></option>
+        </select>
+    </div>
+
     <div class="u-form-group">
         <button type="submit">Sing up</button>
     </div>
@@ -49,12 +74,19 @@ function chageposition() {
     var val1=document.getElementById('vict');
     if (val.checked){
             document.getElementById('p1').innerHTML='Sub inspector';
+            document.getElementById('p1').value='si'
+
             document.getElementById('p2').innerHTML='OC';
+            document.getElementById('p2').value='oc'
         }
     else if (val1.checked){
         document.getElementById('p1').innerHTML='student';
+        document.getElementById('p1').value='student'
+
         document.getElementById('p2').innerHTML='job';
+        document.getElementById('p2').value='job'
     }
 }
 </script>
+<script src="{% static 'loc.js' %}"></script>
 {% endblock %}

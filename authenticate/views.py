@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from .models import *
+from .models import Profile
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 
 # Create your views here.
@@ -21,6 +22,7 @@ def login(request):
     else:
         return render(request,templates)
 
+
 def singup(request):
     templates='auth\singup.html'
     contex_user={'user_error':'This account already exist'}
@@ -33,13 +35,15 @@ def singup(request):
                     return render(request,templates,contex_user)
             except User.DoesNotExist:
                 users= User.objects.create_user(request.POST['email'], password=request.POST['password'])
-                profile=Profile()
-                profile.user= request.user
-                profile.fullname=request.POST['fullname']
+                profile= Profile.objects.get(user=users)
                 try:
-                    profile.type=request.POST['po']
+                    profile.type_of=request.POST['adminstration']
                 except:
-                    profile.type=request.POST['vi']
+                    profile.type_of=request.POST['victim']
+                profile.fullname=request.POST['fullname']
+                profile.district=request.POST['dis']
+                profile.phone=request.POST['number']
+                profile.position=request.POST['choice1']
                 profile.save()
                 auth.login(request, users)
                 return redirect('index')
