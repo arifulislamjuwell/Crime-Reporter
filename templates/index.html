@@ -348,8 +348,8 @@
   <form class="form-style-9" id="eForm">
     <ul>
     <li>
-        <input type="text" name="field1" class="field-style field-split align-none" placeholder="Name" />
-        <input type="text" name="field2" class="field-style field-split align-none" placeholder="Phone Number" />
+        <input id="name11" type="text" name="name" class="field-style field-split align-none" placeholder="Name" />
+        <input id="phone" type="text" name="phone" class="field-style field-split align-none" placeholder="Phone Number" />
     
     </li>
     <li>
@@ -372,17 +372,44 @@
 
     </li>
     <li>
-        <input type="text" name="field1" class="field-style field-split align-none" placeholder="Location" />
+        <input id="location" type="text" name="field1" class="field-style field-split align-none" placeholder="Location" />
     
     </li>
     <li>
-    <textarea name="field5" class="field-style" placeholder="Message"></textarea>
+    <textarea id="msg" name="field5" class="field-style" placeholder="Message"></textarea>
     </li>
-<button class="button">Send Alert</button> <button onclick="closeForm()" class="buttonc">Close</button>
+<button type="submit" class="button">Send Alert</button> <button onclick="closeForm()" class="buttonc">Close</button>
 
     </ul>
     </form>
     <!--endemergency form-->
+
+<script>
+
+  $(document).on('submit', '#eForm', function(e){
+    alert($('#name11').val())
+    e.preventDefault()
+
+    $.ajax({
+      type: 'POST',
+      url:'{% url "emergency" %}', 
+      data:{
+        name: $('#name11').val(),
+        phone: $('#phone').val(),
+        district: $('#check11').val(),
+        location: $('#location').val(),
+        message:$('#msg').val(),
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+      },
+      success: function(data){
+        alert()
+      }
+  })
+    $("#eForm").hide();
+  });
+</script>
+
+
 
 <script>
 function openForm(){
