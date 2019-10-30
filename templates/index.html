@@ -345,7 +345,7 @@
   <!--/ contact-->
   <!--emergency report form-->
 
-  <form class="form-style-9" id="eForm">
+  <form class="form-style-9" id="eForm">{% csrf_token %}
     <ul>
     <li>
         <input id="name11" type="text" name="name" class="field-style field-split align-none" placeholder="Name" />
@@ -387,7 +387,6 @@
 <script>
 
   $(document).on('submit', '#eForm', function(e){
-    alert($('#name11').val())
     e.preventDefault()
 
     $.ajax({
@@ -402,7 +401,7 @@
         csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
       },
       success: function(data){
-        alert()
+        alert (data)
       }
   })
     $("#eForm").hide();
