@@ -21,3 +21,7 @@ def thana_Number(request):
         list.append(description[k]+'-'+number[k])
         k+=1
     return render(request, templates,{'aa':list})
+
+def notice(request):
+    templates= 'other\\notice.html'
+    return render(request, templates)

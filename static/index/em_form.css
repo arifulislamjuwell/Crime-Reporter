@@ -1,4 +1,19 @@
 
+.form-style-9 {
+  
+  
+  background: none;
+  
+  color: #FAB87F;
+  font-weight: bold;
+  transition: all .5s;
+  margin-top: 1em;
+}
+.form-style-9:hover {
+  background: #FAB87F;
+  
+}
+
 .form-style-9{
     display: none;
 	max-width: 450px;
@@ -7,7 +22,7 @@
 	margin: 50px auto;
 	box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.35);
 	border-radius: 10px;
-    border: 10px solid rgb(255, 3, 3);
+    border: 10px solid rgb(141, 84, 84);
     
     position: fixed;
     bottom: 50px;
