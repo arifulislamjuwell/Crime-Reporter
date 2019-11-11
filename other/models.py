@@ -9,3 +9,4 @@ class Notice(models.Model):
     created_time= models.DateField(auto_now=True)
     expire_time=models.DateField(null= True)
     descrp= models.CharField(max_length= 100)
+    exact_location= models.CharField(max_length= 100)
