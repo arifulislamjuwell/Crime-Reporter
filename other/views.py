@@ -1,8 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
+from django.shortcuts import redirect
 from bs4 import BeautifulSoup
 import requests
 import re
 from csv import writer
+from .models import Notice
+from authenticate.models import Profile
+from django.contrib.auth.models import User
 
 def thana_Number(request):
     templates='other\\thanaNumber.html'
@@ -25,3 +29,23 @@ def thana_Number(request):
 def notice(request):
     templates= 'other\\notice.html'
     return render(request, templates)
+
+def add_notice(request):
+    templates= 'other\\add_notice.html'
+    if request.method == "POST":
+        print('----------------------->')
+        user= request.user
+        user_obj= get_object_or_404(User, username=user)
+        profile= get_object_or_404(Profile, user= user_obj)
+        notice= Notice()
+        notice.crater= user
+        notice.area= profile
+        notice.title= request.POST['title']
+        notice.expire_time=request.POST['ex_date']
+        notice.descrp=request.POST['description']
+        notice.exact_location=request.POST['location']
+        notice.save()
+
+        return redirect('notice')
+    else:
+        return render(request, templates,{})

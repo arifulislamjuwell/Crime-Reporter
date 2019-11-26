@@ -10,3 +10,6 @@ class Notice(models.Model):
     expire_time=models.DateField(null= True)
     descrp= models.CharField(max_length= 100)
     exact_location= models.CharField(max_length= 100)
+
+    def __str__(self):
+        return self.title

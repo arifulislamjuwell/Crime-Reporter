@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'notice/add_notice.css' %}">
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="form-style-2">
+    <div class="form-style-2-heading">Provide your Notice information</div>
+    <form action="{% url 'add_notice' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+    <label for="field1"><span>Title <span class="required">*</span></span><input type="text" class="input-field" name="title" value="" required/></label>
+    <label for="field2"><span>Expired date <span class="required">*</span></span><input type="date" class="input-field" name="ex_date" value="" required/></label>
+    
+    <label for="field4"><span>Division <span class="required">*</span></span><select name="division" class="select-field chech" required>
+        <option value="">Division</option>
+        <option value="dhaka">Dhaka</option>
+        <option value="chittagong">chittagong</option>
+        <option value="barishal">Barishal</option>
+        <option value="khulna">Khulna</option>
+        <option value="rajshahi">Rajshahi</option>
+        <option value="rangpur">Rangpur</option>
+        <option value="sylhet">Sylhet</option>
+        <option value="mymensingh">Mymensingh</option>
+    </select></label>
+    <label for="field4"><span>Zilla<span class="required">*</span></span><select id="check11" name="zilla" class="select-field" required>
+        <option> zilla </option>
+    </select></label>
+    <label for="field1"><span>Notice Related location <span class="required">*</span></span><input type="text" class="input-field" name="location" value="" /></label>
+    <label for="field5"><span>Description <span class="required">*</span></span><textarea name="description" class="textarea-field" required></textarea></label>
+    
+    <label><span> </span><input type="submit" value="Submit" /></label>
+    </form>
+    </div>
+
+
+
+<script src="{% static 'loc.js' %}"></script>
+{% endblock %}
