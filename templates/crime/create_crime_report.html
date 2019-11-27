@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'notice/add_notice.css' %}">
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="form-style-2">
+    <div class="form-style-2-heading">Provide your Report information</div>
+    <form action="{% url 'create_crime' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+    <label for="field1"><span>Title <span class="required">*</span></span><input type="text" class="input-field" name="title" value="" required/></label>
+    <label for="field2"><span>Phone Number <span class="required">*</span></span><input type="text" class="input-field" name="phone" value="" required/></label>
+    <label for="field4"><span>Division <span class="required">*</span> </span>
+        <select name="division" class="select-field chech">
+            <option value="">Division</option>
+            <option value="dhaka">Dhaka</option>
+            <option value="chittagong">chittagong</option>
+            <option value="barishal">Barishal</option>
+            <option value="khulna">Khulna</option>
+            <option value="rajshahi">Rajshahi</option>
+            <option value="rangpur">Rangpur</option>
+            <option value="sylhet">Sylhet</option>
+            <option value="mymensingh">Mymensingh</option> 
+        </select>
+    </label>
+
+    <label for="field4"><span>Zilla <span class="required">*</span></span>
+        <select class="select-field" id="check11" name="zilla">
+            <option> zilla </option>
+        </select>
+        </select>
+    </label>
+
+    <label for="field1"><span>Report Related location <span class="required">*</span></span><input type="text" class="input-field" name="location" value="" /></label>
+    <label for="field5"><span>Message <span class="required">*</span></span><textarea name="message" class="textarea-field" required></textarea></label>
+    
+    <label><span> </span><input type="submit" value="Submit" /></label>
+    </form>
+    </div>
+
+
+
+<script src="{% static 'loc.js' %}"></script>
+{% endblock %}

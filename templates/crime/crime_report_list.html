@@ -1,0 +1,58 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'notice.css' %}">
+<br><br>
+<br><br>
+<br>
+<br>
+<div style="height: 100px; width: 100%;">
+  <h1 style="text-align: center;color: red;">
+    Crime Repot Information
+  </h1>
+  <p style="text-align: center;">
+    <button onclick="location.href='{% url 'create_crime' %}'"
+      style=" background-color: #003375;padding: 10px 24px; color: white;">Add Crime Report</button>
+    <button style=" background-color: #003375;padding: 10px 24px; color: white;">Delete Crime</button>
+    
+  </p>
+
+</div>
+<form>
+  <div class="topnav">
+    <div>
+      <select name="choice" class='chech'>
+        <option value="">Division</option>
+        <option value="dhaka">Dhaka</option>
+        <option value="chittagong">chittagong</option>
+        <option value="barishal">Barishal</option>
+        <option value="khulna">Khulna</option>
+        <option value="rajshahi">Rajshahi</option>
+        <option value="rangpur">Rangpur</option>
+        <option value="sylhet">Sylhet</option>
+        <option value="mymensingh">Mymensingh</option>
+      </select>
+    </div>
+    <div>
+      <select id="check11" name="dis">
+        <option> zilla </option>
+      </select>
+    </div>
+
+    <div class="search-container">
+      <input type="text" placeholder="Search.." name="search">
+      <button type="submit"><i class="fa fa-search"></i></button>
+</form>
+</div>
+</div>
+
+<div>
+  fgasfas ga g
+</div>
+
+
+<script src="{% static 'loc.js' %}"></script>
+{% endblock %}

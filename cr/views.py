@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.shortcuts import HttpResponse
 from .models import Crimerepost
 from authenticate.models import Profile
@@ -52,3 +52,27 @@ def emergency(request):
                  smtp.sendmail(EMAIL_ADDRESS, email, msg)
         
         return HttpResponse(pol_dic)
+
+def crime_report(request):
+    templates='crime\crime_report_list.html'
+    return render(request,templates)
+
+def create_crime(request):
+    templetes= 'crime\create_crime_report.html'
+
+    if request.method == "POST":
+        print('----------------------->')
+        crime_report= Crimerepost()
+
+        crime_report.user= request.user
+        crime_report.name= request.POST['title']
+        crime_report.phone= request.POST['phone']
+        crime_report.district=request.POST['zilla']
+        crime_report.message=request.POST['message']
+        crime_report.location=request.POST['location']
+        crime_report.is_instant=False
+        crime_report.save()
+
+        return redirect('crime_report')
+    else:
+        return render(request,templetes)
