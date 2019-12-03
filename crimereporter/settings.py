@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'authenticate',
     'cr',
     'other',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

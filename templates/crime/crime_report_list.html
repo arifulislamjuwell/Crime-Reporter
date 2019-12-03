@@ -1,10 +1,11 @@
-
 {% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'notice.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'list.css' %}">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <br><br>
 <br><br>
 <br>
@@ -17,10 +18,9 @@
     <button onclick="location.href='{% url 'create_crime' %}'"
       style=" background-color: #003375;padding: 10px 24px; color: white;">Add Crime Report</button>
     <button style=" background-color: #003375;padding: 10px 24px; color: white;">Delete Crime</button>
-    
   </p>
-
 </div>
+
 <form>
   <div class="topnav">
     <div>
@@ -45,14 +45,101 @@
     <div class="search-container">
       <input type="text" placeholder="Search.." name="search">
       <button type="submit"><i class="fa fa-search"></i></button>
+    </div>
+  </div>
+
+
 </form>
+<div class="list-type3">
+  <ol class="crime_post">
+    {% for crime in crimereports %}
+    <li onclick="document.getElementById('id01').style.display='block'" value="{{ crime.id }}" id="1"><a
+        href="#">{{ crime.name }} District- {{ crime.district }}</a></li>
+    {% endfor %}
+
+  </ol>
 </div>
+<p>
+
+</p>
+<div class="w3-container">
+  <div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-card-4">
+      <header class="w3-container w3-teal">
+        <span onclick="document.getElementById('id01').style.display='none'"
+          class="w3-button w3-display-topright">&times;</span>
+        <h2 id="c_title">Modal Header</h2>
+      </header>
+      <div class="w3-container">
+        <p>You have two options to close this modal:</p>
+        <p>Click on the "x" or click anywhere outside of the modal!</p>
+      </div>
+      <footer class="w3-container w3-teal">
+        <p>Modal Footer</p>
+      </footer>
+    </div>
+  </div>
 </div>
 
-<div>
-  fgasfas ga g
-</div>
 
 
 <script src="{% static 'loc.js' %}"></script>
+
+<script>
+  $(document).ready(function () {
+    $('ol.crime_post li').click(function (e) {
+      id = this.value
+      e.preventDefault()
+
+      $.ajax({
+        type: 'GET',
+        url: '{% url "crime_report" %}',
+        data: {
+          id: id,
+        },
+        success: function (data) {
+          var i;
+          for (i = 0; i < data[Object.keys(data)[0]].length; i++) {
+            switch (i) {
+              case 0:
+                name = data[Object.keys(data)[0]][i];
+                break;
+                case 1:
+                title = data[Object.keys(data)[0]][i];
+                break;
+                case 2:
+                phone = data[Object.keys(data)[0]][i];
+                break;
+                case 3:
+                district = data[Object.keys(data)[0]][i];
+                break;
+                case 4:
+                location = data[Object.keys(data)[0]][i];
+                break;
+                case 5:
+                message = data[Object.keys(data)[0]][i];
+                break;
+                case 6:
+                post_time = data[Object.keys(data)[0]][i];
+                break;
+
+            }
+
+          }
+        }
+      })
+
+    });
+  });
+</script>
+<script>
+  var modal = document.getElementById('id01');
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+</script>
 {% endblock %}

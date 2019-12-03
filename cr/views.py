@@ -1,10 +1,11 @@
-from django.shortcuts import render,redirect
-from django.shortcuts import HttpResponse
+from django.shortcuts import render,redirect,get_object_or_404,HttpResponse
+from django.http import JsonResponse
 from .models import Crimerepost
 from authenticate.models import Profile
 import smtplib
 import os
-
+import json
+from django.contrib.auth.models import User
 # Create your views here.
 def emergency(request):
     if request.method == 'POST':
@@ -53,9 +54,31 @@ def emergency(request):
         
         return HttpResponse(pol_dic)
 
-def crime_report(request):
+def crime_report_list(request):
     templates='crime\crime_report_list.html'
-    return render(request,templates)
+    total_crime_list= Crimerepost.objects.filter(is_instant=False)
+
+    try:
+        if request.is_ajax():
+            data_list=[]
+            if request.method == "GET":
+                id= request.GET['id']
+                crime= Crimerepost.objects.filter(id=id).values('user','name','phone','district','location','message')
+                for key,value in crime[0].items():
+                    data_list.append(value)
+                user_id=data_list[0]
+                user_name=Profile.objects.filter(user__id=user_id).values('fullname')
+                data_list[0]=user_name[0]['fullname']
+                print(data_list)
+                context={
+                    'data':data_list
+                }
+                return JsonResponse(context ,safe= False)
+    except Exception as e:
+        print(e)
+        return HttpResponse('error')
+
+    return render(request,templates,{'crimereports':total_crime_list,})
 
 def create_crime(request):
     templetes= 'crime\create_crime_report.html'
