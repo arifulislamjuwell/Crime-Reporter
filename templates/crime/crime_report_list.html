@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'notice.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'list.css' %}">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
 <br><br>
 <br><br>
 <br>
@@ -17,11 +18,12 @@
   <p style="text-align: center;">
     <button onclick="location.href='{% url 'create_crime' %}'"
       style=" background-color: #003375;padding: 10px 24px; color: white;">Add Crime Report</button>
-    <button style=" background-color: #003375;padding: 10px 24px; color: white;">Delete Crime</button>
+    <button onclick="location.href='{% url 'own_created_crime' %}'" style=" background-color: #003375;padding: 10px 24px; color: white;">Own created Crime</button>
   </p>
 </div>
 
 <form>
+    {% csrf_token %}
   <div class="topnav">
     <div>
       <select name="choice" class='chech'>
@@ -50,11 +52,15 @@
 
 
 </form>
+{% csrf_token %}
 <div class="list-type3">
   <ol class="crime_post">
     {% for crime in crimereports %}
-    <li onclick="document.getElementById('id01').style.display='block'" value="{{ crime.id }}" id="1"><a
-        href="#">{{ crime.name }} District- {{ crime.district }}</a></li>
+    <li onclick="document.getElementById('id01').style.display='block'" value="{{ crime.id }}" id="1">
+      <a>{{ crime.name }} District- {{ crime.district }}</a>
+    </li> 
+    <br>
+    <br>
     {% endfor %}
 
   </ol>
@@ -68,14 +74,38 @@
       <header class="w3-container w3-teal">
         <span onclick="document.getElementById('id01').style.display='none'"
           class="w3-button w3-display-topright">&times;</span>
-        <h2 id="c_title">Modal Header</h2>
+        <h2 id="c_title"></h2>
       </header>
-      <div class="w3-container">
-        <p>You have two options to close this modal:</p>
-        <p>Click on the "x" or click anywhere outside of the modal!</p>
+      <div class="w3-container"><p></p>
+        <table class="w3-table w3-blue">
+          <tr>
+            <th scope="row">Name</th>
+            <td id="name"></td>
+
+        </tr>
+        <tr>
+            <th scope="row"> Phone </th>
+            <td id="phone"></td>
+
+        </tr>
+        <tr>
+            <th scope="row">District </th>
+            <td id="district"></td>
+
+        </tr>
+        <tr>
+            <th scope="row"> Location</th>
+            <td id="location"></td>
+        </tr>
+        <tr>
+          <th scope="row"> Message </th>
+          <td id="message"></td>
+      </tr>
+        </table>
+        <p></p>
       </div>
       <footer class="w3-container w3-teal">
-        <p>Modal Footer</p>
+        <p id="post_time"> </p>
       </footer>
     </div>
   </div>
@@ -86,16 +116,16 @@
 <script src="{% static 'loc.js' %}"></script>
 
 <script>
-  $(document).ready(function () {
     $('ol.crime_post li').click(function (e) {
       id = this.value
       e.preventDefault()
 
       $.ajax({
-        type: 'GET',
-        url: '{% url "crime_report" %}',
+        type: 'POST',
+        url: '{% url "show_crime" %}',
         data: {
           id: id,
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
         },
         success: function (data) {
           var i;
@@ -114,7 +144,7 @@
                 district = data[Object.keys(data)[0]][i];
                 break;
                 case 4:
-                location = data[Object.keys(data)[0]][i];
+                location_crime = data[Object.keys(data)[0]][i];
                 break;
                 case 5:
                 message = data[Object.keys(data)[0]][i];
@@ -126,11 +156,19 @@
             }
 
           }
+
+          document.getElementById('c_title').innerHTML =title
+          document.getElementById('name').innerHTML =name
+          document.getElementById('phone').innerHTML =phone
+          document.getElementById('district').innerHTML =district
+          document.getElementById('location').innerHTML =location_crime
+          document.getElementById('message').innerHTML =message
+          document.getElementById('post_time').innerHTML = moment(post_time).format('LL');
+          
         }
       })
 
     });
-  });
 </script>
 <script>
   var modal = document.getElementById('id01');

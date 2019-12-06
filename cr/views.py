@@ -57,27 +57,6 @@ def emergency(request):
 def crime_report_list(request):
     templates='crime\crime_report_list.html'
     total_crime_list= Crimerepost.objects.filter(is_instant=False)
-
-    try:
-        if request.is_ajax():
-            data_list=[]
-            if request.method == "GET":
-                id= request.GET['id']
-                crime= Crimerepost.objects.filter(id=id).values('user','name','phone','district','location','message')
-                for key,value in crime[0].items():
-                    data_list.append(value)
-                user_id=data_list[0]
-                user_name=Profile.objects.filter(user__id=user_id).values('fullname')
-                data_list[0]=user_name[0]['fullname']
-                print(data_list)
-                context={
-                    'data':data_list
-                }
-                return JsonResponse(context ,safe= False)
-    except Exception as e:
-        print(e)
-        return HttpResponse('error')
-
     return render(request,templates,{'crimereports':total_crime_list,})
 
 def create_crime(request):
@@ -99,3 +78,80 @@ def create_crime(request):
         return redirect('crime_report')
     else:
         return render(request,templetes)
+
+def show_crime(request):
+    try:
+        if request.is_ajax():
+            data_list=[]
+            if request.method == "POST":
+                id= request.POST['id']
+                crime= Crimerepost.objects.filter(id=id).values('user','name','phone','district','location','message','date')
+                for key,value in crime[0].items():
+                    data_list.append(value)
+                user_id=data_list[0]
+                user_name=Profile.objects.filter(user__id=user_id).values('fullname')
+                data_list[0]=user_name[0]['fullname']
+                print(data_list)
+                context={
+                    'data':data_list
+                }
+                return JsonResponse(context ,safe= False)
+    except Exception as e:
+        print(e)
+        return render (request,'crime\crime_report_list.html' )
+
+def own_crime(request):
+    try:
+        own_crime= Crimerepost.objects.filter(user= request.user)
+        return render(request,'crime\own_crime.html',{'crimes':own_crime})
+    except Exception as e:
+        own_crime='you have no created crime'
+        return render(request,'crime\own_crime.html')
+
+def delete_crime(request):
+    try:
+        id=request.POST.get('id')
+        get_object_or_404(Crimerepost, id=id).delete()
+        return HttpResponse('')
+    except Exception as e:
+        print(e)
+
+def search_officer(request):
+    try:
+        district=request.POST.get('district')
+        id=request.POST.get('id')
+
+        officer_list=[]
+        profile= Profile.objects.filter(district= district).values('id','fullname','position')
+        for i in profile:
+            dic={
+            }
+            dic['id']=i['id']
+            dic['name']=i['fullname']
+            dic['position']=i['position']
+            officer_list.append(dic)
+
+        print(officer_list)
+        context={
+            'data':officer_list,
+            'id':id
+        }
+        return JsonResponse(context, safe=False)
+    except Exception as e:
+        print(e)
+
+
+def refer_crime(request):
+    try:
+        user_id=request.POST.get('user_id')
+        crime_id=request.POST.get('crime_id')
+        print(user_id)
+        print(crime_id)
+        user= get_object_or_404(Profile, id=user_id)
+        crime=get_object_or_404(Crimerepost, id=crime_id)
+        crime.refer_user=user
+        crime.save()
+        return JsonResponse({}, safe=False)
+
+    except Exception as e:
+        print(e)

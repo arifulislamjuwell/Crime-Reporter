@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'own.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'list.css' %}">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+<br><br>
+<br><br>
+
+<div style="height: 40px; width: 100%;">
+    <h1 style="text-align: center;color: red;">
+        Own Created Crime
+    </h1>
+</div>
+<table>
+    <thead>
+        {% if crimes %}
+        <tr>
+            <th colspan="3"> my Own created crime </th>
+        </tr>
+        <tr>
+            <th>#</th>
+            <th colspan="2"> By clicking <b style="color: red;">delete</b> bullon you can remove your crime </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for crime in crimes %}
+        <script>
+            localStorage.setItem("id", {{ crime.id }});
+            localStorage.setItem("district", "{{ crime.district }}");
+            const profile = {
+                name: "{{ crime.refer_user.fullname }}",
+                type: "{{ crime.refer_user.type_of }}",
+                phone: "{{ crime.refer_user.phone }}",
+                position: "{{ crime.refer_user.position }}",
+            }
+            window.localStorage.setItem('refer_profile', JSON.stringify(profile));
+        </script>
+        <form>
+            {% csrf_token %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td> <b>{{ crime.name }}</b> created at <i>{{ crime.date }}</i> </td>
+                <td>
+                    {% if not crime.refer_user %}
+                    <i onclick="document.getElementById('id02').style.display='block'"
+                        class="material-icons button edit" id="refer">Refer</i>&nbsp;&nbsp;
+                    {% else %}
+                    <i  onclick="document.getElementById('id03').style.display='block'" class="material-icons button edit"><b>Already referred</b></i>&nbsp; &nbsp;
+                    {% endif %}
+                    <i onclick="document.getElementById('id01').style.display='block'"
+                        class="material-icons button delete">delete</i>
+                </td>
+            </tr>
+        </form>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <th> You have no crime </th>
+        </tr>
+        {% endif %}
+
+
+    </tbody>
+</table>
+
+<div class="w3-container">
+    <div id="id01" class="w3-modal">
+        <div class="w3-modal-content w3-card-4">
+            <header class="w3-container w3-teal">
+                <span onclick="document.getElementById('id01').style.display='none'"
+                    class="w3-button w3-display-topright">&times;</span>
+                <h2 id="c_title"> Are You Confirm ?</h2>
+            </header>
+            <div class="w3-container">
+                <p></p>
+                <table class="w3-table w3-blue">
+                    <tr>
+                        <th>
+                            <button onclick="document.getElementById('id01').style.display='none'" style="  background-color: #4CAF50;
+                        padding: 9px 90px;
+                        text-align: center;
+                        display: inline-block;
+                        font-size: 30px;
+                        cursor: pointer;"> No </button>
+                        </th>
+                        <th>
+                            <button id="delete" style="  background-color: rgb(255, 0, 0);
+                          padding: 9px 90px;
+                        text-align: center;
+                        display: inline-block;
+                        font-size: 30px;
+                        cursor: pointer;"> Yes </button>
+                        </th>
+                    </tr>
+                </table>
+                <p></p>
+            </div>
+            <footer class="w3-container w3-teal">
+                <p id="post_time"> </p>
+            </footer>
+        </div>
+    </div>
+</div>
+
+
+<div class="w3-container">
+    <div id="id02" class="w3-modal">
+        <div class="w3-modal-content w3-card-4">
+            <header class="w3-container w3-teal">
+                <span onclick="document.getElementById('id02').style.display='none'"
+                    class="w3-button w3-display-topright">&times;</span>
+                <h2 id="c_title">Please select your nearest officer</h2>
+            </header>
+            <form id="refer_officer">
+                {% csrf_token %}
+                <div class="w3-container" id="con">
+
+                </div>
+                <footer class="w3-container w3-teal">
+                    <p id="post_time"> </p> <input style="background-color: rgb(0, 4, 255);
+            float: right;
+              padding: 5px 60px;
+              text-align: center;
+              display: inline-block;
+              font-size: 20px;
+              cursor: pointer;" type="submit" value="Refer">
+                </footer>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="w3-container">
+        <div id="id03" class="w3-modal">
+            <div class="w3-modal-content w3-card-4">
+                <header class="w3-container w3-teal">
+                    <span onclick="document.getElementById('id03').style.display='none'"
+                        class="w3-button w3-display-topright">&times;</span>
+                    <h2 id="c_title">Reffered Officer Information</h2>
+                </header>
+                <form id="refer_officer">
+                    {% csrf_token %}
+                    <div class="w3-container" id="con">
+                        <h4 id="ref_name"></h4>
+                        <b><address id="ref_add">
+
+                        </address></b>
+
+                    </div>
+                    <footer class="w3-container w3-teal">
+                        <p></p>
+                    </footer>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+
+<script>
+    $('#delete').click(function (e) {
+        id = localStorage.getItem("id")
+        e.preventDefault()
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "delete_crime" %}',
+            data: {
+                id: id,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function (data) {
+                location.reload()
+
+            }
+        })
+
+    });
+</script>
+<script>
+    $('#refer').click(function (e) {
+        district = localStorage.getItem("district")
+        id = localStorage.getItem("id")
+        e.preventDefault()
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "src_officer" %}',
+            data: {
+                district: district,
+                id: id,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function (data) {
+                $("#con").empty();
+                var i;
+                for (i = 0; i < data.data.length; i++) {
+                    name = data.data[i]['name']
+                    position = data.data[i]['position']
+                    id = data.data[i]['id']
+                    crime_refer_id = data.id
+                    $('#con').append("<input type='checkbox' name='a' class='radio' value='" + id + "'/>" + name + "")
+                }
+
+
+            }
+        })
+
+    });
+</script>
+<script>
+    $('input.radio').on('change', function () {
+        $('input.radio').not(this).prop('checked', false);
+    });
+</script>
+
+<script>
+    $("#refer_officer").submit(function () {
+        radioValue = $("input[name='a']:checked").val();
+        id = crime_refer_id;
+        alert(id)
+        $.ajax({
+            type: 'POST',
+            url: '{% url "refer_crime" %}',
+            data: {
+                user_id: radioValue,
+                crime_id: id,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function (data) {
+                alert('crime refer successfully')
+
+            }
+        })
+    });
+</script>
+<script>
+    a = localStorage.getItem('refer_profile')
+    pro_obj = JSON.parse(a)
+    document.getElementById('ref_name').innerHTML=pro_obj.name
+    $('#ref_add').append("Type: "+ pro_obj.type +"<br>Position: "+ pro_obj.position +"<br>Phone Number: "+ pro_obj.phone +"")
+</script>
+
+{% endblock %}
