@@ -11,4 +11,5 @@ urlpatterns = [
     path('delete-crime/',delete_crime, name='delete_crime'),
     path('search-officer/', search_officer, name='src_officer'),
     path('refer-crime/',refer_crime, name='refer_crime'),
+    path('reply-crime/',reply_crime, name='reply_crime'),
 ]

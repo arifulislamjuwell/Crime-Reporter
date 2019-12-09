@@ -13,6 +13,16 @@ class Crimerepost(models.Model):
     date=models.DateField(blank=True, auto_now_add=True)
     is_instant=models.BooleanField(default=True)
     refer_user=models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True ,related_name='refer_user')
+    take_under=models.ForeignKey(Profile,  on_delete=models.CASCADE, null=True, blank=True ,related_name='take_under')
 
     def __str__(self):
         return self.name 
+
+class Comment(models.Model):
+    user= models.ForeignKey(User, on_delete=models.CASCADE)
+    name= models.ForeignKey(Crimerepost, on_delete=models.CASCADE)
+    body=models.CharField(max_length=1000)
+    cerated_time=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.body 

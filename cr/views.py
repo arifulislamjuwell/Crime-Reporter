@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404,HttpResponse
 from django.http import JsonResponse
-from .models import Crimerepost
+from .models import Crimerepost,Comment
 from authenticate.models import Profile
 import smtplib
 import os
@@ -28,6 +28,7 @@ def emergency(request):
         crime_obj.district= district
         crime_obj.location=location
         crime_obj.message= request.POST['message']
+        crime_obj.is_instant=True
         crime_obj.save()
 
         list_polices_distric = Profile.objects.filter(district= district, type_of='police')
@@ -56,16 +57,23 @@ def emergency(request):
 
 def crime_report_list(request):
     templates='crime\crime_report_list.html'
+    try:
+        profile=get_object_or_404(Profile, user=request.user)
+    except Exception as e:
+        return render(request,templates)
     total_crime_list= Crimerepost.objects.filter(is_instant=False)
-    return render(request,templates,{'crimereports':total_crime_list,})
+
+    if request.method=="POST":
+        district=request.POST.get('dis')
+        if district:
+            total_crime_list=total_crime_list.filter(district=district)
+    return render(request,templates,{'crimereports':total_crime_list,'profile':profile})
 
 def create_crime(request):
     templetes= 'crime\create_crime_report.html'
 
     if request.method == "POST":
-        print('----------------------->')
         crime_report= Crimerepost()
-
         crime_report.user= request.user
         crime_report.name= request.POST['title']
         crime_report.phone= request.POST['phone']
@@ -122,7 +130,7 @@ def search_officer(request):
         id=request.POST.get('id')
 
         officer_list=[]
-        profile= Profile.objects.filter(district= district).values('id','fullname','position')
+        profile= Profile.objects.filter(type_of="police", district= district).values('id','fullname','position')
         for i in profile:
             dic={
             }
@@ -155,3 +163,20 @@ def refer_crime(request):
 
     except Exception as e:
         print(e)
+
+def reply_crime(request):
+    if request.is_ajax():
+        id = request.GET['id']
+        try:
+            crime = get_object_or_404(Crimerepost, id=id)
+            reply_all = Comment.objects.filter(name=crime).values("cerated_time", "user", 'body')
+            reply_all = list(reply_all)
+        except Exception as e:
+            reply_all = 'No Reply'
+            logger.info(str(e))
+            print(e)
+
+        return JsonResponse(reply_all, safe=False)
+
+    else:
+        return Response('')
