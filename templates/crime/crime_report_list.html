@@ -97,6 +97,16 @@
                 <tr>
                   <td align="center">
                     <a onclick="get_crime({{ crime.id }});" class="btn btn-default"><em class="fa fa-pencil"></em></a>
+                    {% if crime.is_solved == False %}
+                    {% if not profile.type_of == 'victim' %}
+                    <a onclick="solved({{ crime.id }});" class="btn btn-default"><em class="fa fa-times"></em></a>
+                    {% else %}
+                    <a class="btn btn-default"><em class="fa fa-times"></em></a>
+                    {% endif %}
+                    {% else %}
+                    <a class="btn btn-default"><em class="fa fa-check"></em></a>
+                    {% endif %}
+
                   </td>
                   <td class="hidden-xs">{{ crime.id }}</td>
                   <td class="crime_name" id="c_name"> {{ crime.name }} </td>
@@ -150,9 +160,9 @@
       <div class="actionBox">
         <ul class="commentList" id="com_list">
         </ul>
-        <form class="form-inline" role="form">
+        <form class="form-inline" role="form">{% csrf_token %}
           <div class="form-group">
-            <input class="form-control" type="text" placeholder="Your comments" />
+            <input id="com_body" class="form-control" type="text" placeholder="Your comments" />
           </div>
           <div class="form-group">
             <button class="btn btn-default">Add</button>
@@ -168,6 +178,7 @@
 
 <script>
   function get_crime(id) {
+    id = id;
     document.getElementById('id01').style.display = 'block';
     $('#id01').html('')
 
@@ -250,46 +261,87 @@
     var modal = document.getElementById("myModal");
     modal.style.display = "block";
     crime_id = id
-        var data = { 'id': crime_id }
-        $.ajax({
-            method: 'GET',
-            data: data,
-            url: '{% url "reply_crime" %}',
-            success: function (data) {
-                var i;
-                $('#com_list').html("")
-                for (i = 0; i < data.length; i++) {
-                    var body = data[i].body
-                    var created_at = moment(data[i].cerated_time).format('MMMM Do YYYY, h:mm a');
-                    var user = data[i].user
+    var data = { 'id': crime_id }
+    $.ajax({
+      method: 'GET',
+      data: data,
+      url: '{% url "reply_crime" %}',
+      success: function (data) {
+        var i;
+        $('#com_list').html("")
+        for (i = 0; i < data.length; i++) {
+          var body = data[i].body
+          var created_at = moment(data[i].cerated_time).format('MMMM Do YYYY, h:mm a');
+          var user = data[i].user__username
 
-                    $('#com_list').append("<li>\
-                <div class='commenterImage'><img src='http://placekitten.com/50/50' /></div>\
+
+          $('#com_list').append("<li>\
+                <div class='commenterImage'><b>v</b></div>\
                 <div class='commentText'>\
-                    <p class=''>"+ body +"</p>\
-                    <span class='date sub-text'>"+ created_at +"</span></div>\
+                    <p class=''>"+ body  + "&nbsp; &nbsp;<small>commented by"+ user +"</small></p>\
+                    <span class='date sub-text'>"+ created_at + "</span></div>\
             </li>")
-                }
-            },
-            error: function (error_data) {
-                alert("error")
-            }
-        })
-    }
+        }
+      },
+      error: function (error_data) {
+        alert("error")
+      }
+    })
+  }
 
 </script>
 
 <script>
-    $(document).on('ready', function () {
-        $('.comments_val').on('click', function (event) {
-            event.preventDefault();
-            var crime = $(this).parents('tr').children('td.crime_name').text().trim();
+  $(document).on('ready', function () {
+    $('.comments_val').on('click', function (event) {
+      event.preventDefault();
+      var crime = $(this).parents('tr').children('td.crime_name').text().trim();
 
-            $('#crime_names').text(crime)
-        });
-
+      $('#crime_names').text(crime)
     });
 
+  });
+</script>
 
+<script>
+  $(document).on('submit', 'form.form-inline', function () {
+
+    alert(crime_id)
+    $.ajax({
+      method:'post',
+      data:{
+        'body':$("#com_body").val(),
+        'id':crime_id,
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+      },
+      url: '{% url "create_comment" %}',
+      success: function (data) {
+        window.location.reload()
+      },
+      error: function (error_data) {
+        alert("error")
+      }
+    })
+  });
+</script>
+
+<script>
+  function solved(id){
+    $.ajax({
+      method:'get',
+      data:{
+        'id':id,
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+      },
+      url: '{% url "solved" %}',
+      success: function (data) {
+        window.location.reload()
+      },
+      error: function (error_data) {
+        alert("error")
+      }
+    })
+
+  }
 </script>
 {% endblock %}

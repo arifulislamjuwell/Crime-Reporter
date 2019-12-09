@@ -47,8 +47,7 @@
                 <td> <b>{{ crime.name }}</b> created at <i>{{ crime.date }}</i> </td>
                 <td>
                     {% if not crime.refer_user %}
-                    <i onclick="document.getElementById('id02').style.display='block'"
-                        class="material-icons button edit" id="refer">Refer</i>&nbsp;&nbsp;
+                    <i onclick="refer({{ crime.id }});" class="material-icons button edit" id="refer">Refer</i>&nbsp;&nbsp;
                     {% else %}
                     <i  onclick="document.getElementById('id03').style.display='block'" class="material-icons button edit"><b>Already referred</b></i>&nbsp; &nbsp;
                     {% endif %}
@@ -183,16 +182,12 @@
     });
 </script>
 <script>
-    $('#refer').click(function (e) {
-        district = localStorage.getItem("district")
-        id = localStorage.getItem("id")
-        e.preventDefault()
-
+function refer(id) {
+        document.getElementById('id02').style.display='block'
         $.ajax({
             type: 'POST',
             url: '{% url "src_officer" %}',
             data: {
-                district: district,
                 id: id,
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
             },
@@ -211,7 +206,7 @@
             }
         })
 
-    });
+    };
 </script>
 <script>
     $('input.radio').on('change', function () {
@@ -222,8 +217,8 @@
 <script>
     $("#refer_officer").submit(function () {
         radioValue = $("input[name='a']:checked").val();
-        id = crime_refer_id;
-        alert(id)
+        alert(radioValue)
+        id = localStorage.getItem("id")
         $.ajax({
             type: 'POST',
             url: '{% url "refer_crime" %}',

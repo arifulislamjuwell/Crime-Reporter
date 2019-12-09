@@ -126,11 +126,10 @@ def delete_crime(request):
 
 def search_officer(request):
     try:
-        district=request.POST.get('district')
         id=request.POST.get('id')
-
+        crime= get_object_or_404(Crimerepost, id=id)
         officer_list=[]
-        profile= Profile.objects.filter(type_of="police", district= district).values('id','fullname','position')
+        profile= Profile.objects.filter(type_of="police", district=crime.district).values('id','fullname','position')
         for i in profile:
             dic={
             }
@@ -139,7 +138,6 @@ def search_officer(request):
             dic['position']=i['position']
             officer_list.append(dic)
 
-        print(officer_list)
         context={
             'data':officer_list,
             'id':id
@@ -157,6 +155,8 @@ def refer_crime(request):
         print(crime_id)
         user= get_object_or_404(Profile, id=user_id)
         crime=get_object_or_404(Crimerepost, id=crime_id)
+        print(user)
+        print(crime)
         crime.refer_user=user
         crime.save()
         return JsonResponse({}, safe=False)
@@ -169,14 +169,33 @@ def reply_crime(request):
         id = request.GET['id']
         try:
             crime = get_object_or_404(Crimerepost, id=id)
-            reply_all = Comment.objects.filter(name=crime).values("cerated_time", "user", 'body')
+            reply_all = Comment.objects.filter(name=crime).values("cerated_time", "user__username", 'body')
             reply_all = list(reply_all)
         except Exception as e:
             reply_all = 'No Reply'
             logger.info(str(e))
             print(e)
-
         return JsonResponse(reply_all, safe=False)
 
     else:
         return Response('')
+
+def create_comment(request):
+    if request.is_ajax():
+        id = request.POST['id']
+        body= request.POST['body']
+        crime= get_object_or_404(Crimerepost, id=id)
+        c_comment=Comment()
+        c_comment.user=request.user
+        c_comment.name=crime
+        c_comment.body=body
+        c_comment.save()
+        return HttpResponse('create')
+
+def solved_crime(request):
+    if request.is_ajax():
+        id = request.GET['id']
+        print
+        (id)
+        Crimerepost.objects.filter(id=id).update(is_solved=True)
+        return HttpResponse('success')

@@ -14,7 +14,8 @@ class Crimerepost(models.Model):
     is_instant=models.BooleanField(default=True)
     refer_user=models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True ,related_name='refer_user')
     take_under=models.ForeignKey(Profile,  on_delete=models.CASCADE, null=True, blank=True ,related_name='take_under')
-
+    is_solved=models.BooleanField(default=False)
+    
     def __str__(self):
         return self.name 
 

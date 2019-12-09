@@ -5,7 +5,7 @@ from django.dispatch import receiver
 
 
 class Profile(models.Model):
-    user= models.OneToOneField(User, on_delete=models.CASCADE)
+    user= models.OneToOneField(User, on_delete=models.CASCADE, related_name="messages")
     fullname= models.CharField(max_length=100)
     type_of=models.CharField(max_length=100)
     district=models.CharField(max_length=20)
