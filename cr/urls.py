@@ -13,5 +13,6 @@ urlpatterns = [
     path('refer-crime/',refer_crime, name='refer_crime'),
     path('reply-crime/',reply_crime, name='reply_crime'),
     path('create-comment/',create_comment, name='create_comment'),
-    path('solve/',solved_crime, name='solved')
+    path('solve/',solved_crime, name='solved'),
+    path('refer-list/',refer_list, name='refer_list'),
 ]

@@ -195,7 +195,10 @@ def create_comment(request):
 def solved_crime(request):
     if request.is_ajax():
         id = request.GET['id']
-        print
-        (id)
         Crimerepost.objects.filter(id=id).update(is_solved=True)
         return HttpResponse('success')
+
+def refer_list(request):
+    profile=Profile.objects.get(user=request.user)
+    crime=Crimerepost.objects.filter(refer_user=profile)
+    return render(request,'crime/refer_crime.html',{'crimes':crime})

@@ -4,6 +4,12 @@
 {% block content %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'notice.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'comments.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'list.css' %}">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'notice.css' %}">
 <br><br>
 <br><br>
 <br>
@@ -13,13 +19,16 @@
     Notice
   </h1>
   <p style="text-align: center;">
+    {% if not profile.type_of == 'victim' %}
     <button onclick="location.href='{% url 'add_notice' %}'"
       style=" background-color: #003375;padding: 10px 24px; color: white;">Add Notice</button>
-    <button style=" background-color: #003375;padding: 10px 24px; color: white;">Delete Notice</button>
+    <button style=" background-color: #003375;padding: 10px 24px; color: white;">Own create Notice</button>
+    {% endif %}
   </p>
 
 </div>
-<form>
+<form action="{% url 'notice' %}" method="POST">
+    {% csrf_token %}
   <div class="topnav">
     <div>
       <select name="choice" class='chech'>
@@ -47,10 +56,82 @@
 </div>
 </div>
 
+<div class="w3-container">
+    <div id="id01" class="w3-modal">
+    </div>
+  </div>
+
 <div>
-  fgasfas ga g
+  <div class="list-type2">
+    <ol>
+      {% for notice in notices %}
+    <li onclick="get_notice({{ notice.id }});"><a>{{ notice.title }}</a></li>
+      {% endfor %}
+    </ol>
+    </div>
 </div>
 
-
+<script>
+    function get_notice(id) {
+      id = id;
+      document.getElementById('id01').style.display = 'block';
+      $('#id01').html('')
+  
+      $.ajax({
+        type: 'POST',
+        url: '{% url "show_notice" %}',
+        data: {
+          id: id,
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+        },
+        success: function (data) {
+          var i;
+          for (i = 0; i < data[Object.keys(data)[0]].length; i++) {
+            switch (i) {
+              case 0:
+                name = data[Object.keys(data)[0]][i];
+                break;
+              case 1:
+                area = data[Object.keys(data)[0]][i];
+                break;
+              case 2:
+                notice_title = data[Object.keys(data)[0]][i];
+                break;
+              case 3:
+                post_time = data[Object.keys(data)[0]][i];
+                break;
+              case 4:
+                notice_body = data[Object.keys(data)[0]][i];
+                break;
+              case 5:
+                excat_location = data[Object.keys(data)[0]][i];
+                break;
+            }
+          }
+          $('#id01').append("<div class='w3-modal-content w3-card-4'>\
+          <header class='w3-container w3-teal'>\
+          <span onclick='close_modal();'\
+            class='w3-button w3-display-topright'>&times;</span>\
+          <h2 id='c_title'>"+ notice_title + "</h2>\
+          </header>\
+        <div class='w3-container'><p></p>\
+          <table class='w3-table w3-blue'>\<tr><th scope='row'>Creater</th><td id='name'>"+ name + "</td></tr>\
+            <tr><th scope='row'> Area </th><td id='phone'>"+ area + "</td></tr>\
+            <tr><th scope='row'> Location</th><td id='location'>"+ excat_location + "</td></tr>\
+            <tr><th scope='row'> Message </th><td id='message'>"+ notice_body + "</td></tr>\
+          </table><p></p></div>\
+        <footer class='w3-container w3-teal'><p id='post_time'>"+ post_time +"</p></footer></div>")
+  
+        }
+      })
+  
+    };
+  </script>
 <script src="{% static 'loc.js' %}"></script>
+
+<script>
+    function close_modal() {
+      document.getElementById('id01').style.display = 'none';
+    }
+  </script>
 {% endblock %}

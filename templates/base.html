@@ -40,12 +40,9 @@
             <div class="collapse navbar-collapse navbar-right" id="myNavbar">
               <ul class="nav navbar-nav">
                 <li class="active"><a href="{% url 'index' %}">Home</a></li>
-
-                <li class=""><a href="#about">About</a></li>
                 <li class=""><a href="{% url 'crime_report' %}">Crime Report</a></li>
-                <li class=""><a href="{% url 'thanaNumber' %}">Thana</a></li>
                 <li class=""><a href="{% url 'notice' %}">Notice board</a></li>
-
+                <li class=""><a href="{% url 'thanaNumber' %}">Thana</a></li>
                 <li class=""><a href="#service">Services</a></li>
                 {% if user.is_authenticated %}
                                 <li>

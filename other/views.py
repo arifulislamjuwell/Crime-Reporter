@@ -7,6 +7,7 @@ from csv import writer
 from .models import Notice
 from authenticate.models import Profile
 from django.contrib.auth.models import User
+from django.http import JsonResponse
 
 def thana_Number(request):
     templates='other\\thanaNumber.html'
@@ -28,12 +29,17 @@ def thana_Number(request):
 
 def notice(request):
     templates= 'other\\notice.html'
-    return render(request, templates)
+    notice= Notice.objects.all()
+    if request.method=="POST":
+        district=request.POST.get('dis')
+        if district:
+            notice=notice.filter(area__district=district)
+    profile=Profile.objects.get(user=request.user)
+    return render(request, templates,{'notices':notice,'profile':profile})
 
 def add_notice(request):
     templates= 'other\\add_notice.html'
     if request.method == "POST":
-        print('----------------------->')
         user= request.user
         user_obj= get_object_or_404(User, username=user)
         profile= get_object_or_404(Profile, user= user_obj)
@@ -49,3 +55,24 @@ def add_notice(request):
         return redirect('notice')
     else:
         return render(request, templates,{})
+
+def show_notice(request):
+    try:
+        if request.is_ajax():
+            data_list=[]
+            if request.method == "POST":
+                id= request.POST['id']
+                notice= Notice.objects.filter(id=id).values('crater','area__district','title','created_time','descrp','exact_location')
+                for key,value in notice[0].items():
+                    data_list.append(value)
+                user_id=data_list[0]
+                user_name=Profile.objects.filter(user__id=user_id).values('fullname')
+                data_list[0]=user_name[0]['fullname']
+                print(data_list)
+                context={
+                    'data':data_list
+                }
+                return JsonResponse(context ,safe= False)
+    except Exception as e:
+        print(e)
+        return render (request,'crime\crime_report_list.html' )

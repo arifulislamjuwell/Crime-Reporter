@@ -4,13 +4,13 @@
   
   background: none;
   
-  color: #FAB87F;
+  color: rgb(0, 0, 0);
   font-weight: bold;
   transition: all .5s;
   margin-top: 1em;
 }
 .form-style-9:hover {
-  background: #FAB87F;
+  background: rgb(42, 29, 158);
   
 }
 
