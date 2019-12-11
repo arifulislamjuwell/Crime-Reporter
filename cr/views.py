@@ -202,3 +202,15 @@ def refer_list(request):
     profile=Profile.objects.get(user=request.user)
     crime=Crimerepost.objects.filter(refer_user=profile)
     return render(request,'crime/refer_crime.html',{'crimes':crime})
+
+def take_under(request):
+    if request.is_ajax():
+        id = request.POST['id']
+        crime_name=Crimerepost.objects.get(id=id)
+        if not crime_name.take_under:
+            profile=Profile.objects.get(user=request.user)
+            Crimerepost.objects.filter(id=id).update(take_under=profile)
+            mes= 'crime "{}" taken by "{}"'.format(crime_name.name, profile.fullname)
+            return HttpResponse(mes)
+        else:
+            return HttpResponse('alredy taken')

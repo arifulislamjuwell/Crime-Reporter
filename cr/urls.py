@@ -15,4 +15,5 @@ urlpatterns = [
     path('create-comment/',create_comment, name='create_comment'),
     path('solve/',solved_crime, name='solved'),
     path('refer-list/',refer_list, name='refer_list'),
+    path('take-under',take_under, name='take_under'),
 ]

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
+{% load custom_tags %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'index/em_form.css' %}">
 <section id="banner" class="banner">
@@ -16,7 +16,9 @@
             <h1 class="white">Build a resistance against crime !</h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod <br>tempor incididunt ut labore
               et dolore magna aliqua.</p>
+              {% if user|user_check == 'victim' %}
             <a href="#" class="btn btn-appoint" onclick="openForm()">Emergency Faced crime</a>
+              {% endif %}
           </div>
           <div class="overlay-detail text-center">
             <a href="#service"><i class="fa fa-angle-down"></i></a>
