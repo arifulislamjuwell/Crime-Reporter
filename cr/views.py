@@ -38,9 +38,9 @@ def emergency(request):
             pol_dic['position']=police.position
             pol_dic['number']=police.phone
             details_list.append(pol_dic)
-
+        print(list_polices_distric)
         EMAIL_ADDRESS='juwelariful1@gmail.com'
-        EMAIL_PASS='' #password shoud be input
+        EMAIL_PASS='todftxwzykjtnosg'
         with smtplib.SMTP('smtp.gmail.com',  587) as smtp:
              smtp.ehlo()
              smtp.starttls()
